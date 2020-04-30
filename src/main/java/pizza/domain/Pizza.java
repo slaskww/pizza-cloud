@@ -9,5 +9,5 @@ public class Pizza {
 
     private String id;
     private String name;
-    private List<Ingredient> ingredients;
+    private List<String> ingredients;
 }

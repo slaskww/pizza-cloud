@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pizza.domain.Ingredient;
 import pizza.domain.Pizza;
@@ -46,6 +47,12 @@ public class DesignPizzaController {
        }
         model.addAttribute("design", new Pizza());
         return "design";
+    }
+    @PostMapping
+    public String processDesignForm(Pizza pizza){
+        log.info("Przetwarzanie projektu pizzy " + pizza.getName() + "z liczbą składników: " + pizza.getIngredients().size());
+
+        return "redirect:/";
     }
 
     private List<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type){
