@@ -12,7 +12,7 @@ public class OrderController {
 
     @GetMapping("/current")
     public String showOrderForm(Model model){
-        model.addAttribute("order", new Order);
+        model.addAttribute("order", new Order());
         return "orderForm";
     }
 }
