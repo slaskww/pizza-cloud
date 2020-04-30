@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formularz zamówienia</title>
+</head>
+<body>
+<img th:src="@{/images/pizza-cloud.png}">
+<h1>Uzupełnij dane dostawy</h1>
+
+<form method="post" th:action="@{/orders}" th:object="${order}">
+    <div th:if="${#fields.hasErrors()}">
+        <span>Formularz zawiera błędy</span>
+    </div>
+
+    <h3>Adres dostawy zamówienia</h3>
+    <label for="name">Imię i nazwisko</label>
+    <input id="name" th:field="*{name}">
+    <br/>
+
+    <label for="street">Ulica</label>
+    <input id="street" th:field="*{street}">
+    <br/>
+
+    <label for="city">Miasto</label>
+    <input id="city" th:field="*{city}">
+    <br/>
+
+    <label for="state">Wojewodztwo</label>
+    <input id="state" th:field="*{state}">
+    <br/>
+
+    <label for="postCode">Kod pocztowy</label>
+    <input id="postCode" th:field="*{postCode}">
+    <br/>
+
+    <label for="creditCardNo">Numer karty kredytowej</label>
+    <input id="creditCardNo" th:field="*{creditCardNo}">
+    <br/>
+
+    <label for="creditCardExp">Ważność karty kredytowej</label>
+    <input id="creditCardExp" th:field="*{creditCardExp}">
+    <br/>
+
+    <label for="creditCardCvv">Kod CVV</label>
+    <input id="creditCardCvv" th:field="*{creditCardCvv}">
+    <br/>
+
+    <input type="submit" value="Złóż zamówienie">
+</form>
+</body>
+
+
+</html>

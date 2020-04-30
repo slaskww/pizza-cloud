@@ -52,7 +52,7 @@ public class DesignPizzaController {
     public String processDesignForm(Pizza pizza){
         log.info("Przetwarzanie projektu pizzy " + pizza.getName() + "z liczbą składników: " + pizza.getIngredients().size());
 
-        return "redirect:/";
+        return "redirect:/orders/current";
     }
 
     private List<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type){
