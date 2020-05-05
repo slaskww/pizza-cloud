@@ -11,6 +11,9 @@ xmlns:th="http://www.thymeleaf.org">
 <h1>Skomponuj własną pizzę</h1>
 
 <form method="post" th:object="${design}">
+    <div>
+        <span th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Nie wybrano składników</span>
+    </div>
 <div class="grid">
     <div >
         <h3>Wybierz ciasto</h3>
@@ -50,7 +53,7 @@ xmlns:th="http://www.thymeleaf.org">
 </div>
     <h3>Nadaj nazwę swojej pizzy</h3>
     <input type="text" th:field="*{name}">
-
+    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błąd nazwy</span>
     <button>Wyślij zamówienie</button>
 </form>
 </body>

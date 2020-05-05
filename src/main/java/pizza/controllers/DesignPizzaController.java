@@ -3,12 +3,12 @@ package pizza.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 import pizza.domain.Ingredient;
 import pizza.domain.Pizza;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +22,36 @@ public class DesignPizzaController {
     @GetMapping
     public String showDesignForm(Model model){
 
+       Ingredient.Type[] types = Ingredient.Type.values();
+       for (Ingredient.Type type : types){
+           model.addAttribute(type.toString().toLowerCase(), filterByType(fillWithIngredients(), type));
+       }
+        model.addAttribute("design", new Pizza());
+        return "design";
+    }
+    @PostMapping
+    public String processDesignForm(@Valid @ModelAttribute("design") Pizza design, Errors errors, Model model){
+
+        if(errors.hasErrors()){
+
+            Ingredient.Type[] types = Ingredient.Type.values();
+            for (Ingredient.Type type : types){
+                model.addAttribute(type.toString().toLowerCase(), filterByType(fillWithIngredients(), type));
+            }
+            return "design";
+        }
+
+        log.info("Przetwarzanie projektu pizzy " + design.getName() + " z liczbą składników: " + design.getIngredients().size());
+        return "redirect:/orders/current";
+    }
+
+    private List<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type){
+       return ingredients.stream()
+               .filter(ingredient -> ingredient.getType() == type)
+               .collect(Collectors.toList());
+    }
+
+    private  List<Ingredient> fillWithIngredients(){
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("DW", "Wheat", Ingredient.Type.DOUGH),
                 new Ingredient("DC", "Corn", Ingredient.Type.DOUGH),
@@ -40,24 +70,6 @@ public class DesignPizzaController {
                 new Ingredient("ST", "Tomato sauce", Ingredient.Type.SAUCE),
                 new Ingredient("SB", "Barbecue sauce", Ingredient.Type.SAUCE)
         );
-
-       Ingredient.Type[] types = Ingredient.Type.values();
-       for (Ingredient.Type type : types){
-           model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
-       }
-        model.addAttribute("design", new Pizza());
-        return "design";
-    }
-    @PostMapping
-    public String processDesignForm(Pizza pizza){
-        log.info("Przetwarzanie projektu pizzy " + pizza.getName() + "z liczbą składników: " + pizza.getIngredients().size());
-
-        return "redirect:/orders/current";
-    }
-
-    private List<Ingredient> filterByType(List<Ingredient> ingredients, Ingredient.Type type){
-       return ingredients.stream()
-               .filter(ingredient -> ingredient.getType() == type)
-               .collect(Collectors.toList());
+        return ingredients;
     }
 }
