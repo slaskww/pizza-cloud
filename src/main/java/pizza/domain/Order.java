@@ -14,6 +14,10 @@ import javax.validation.constraints.Pattern;
  *  1. zadeklarowanie reguł weryfikacji w klasie domeny (przy użyciu adnotacji)
  *  2. wskazanie w których metodach kontrolera powinna się odbyć weryfikacja danych podczas wykonywania żądań POST (przy użyciu adnotacj @ Valid przy argumencie metod)
  *  3. zmodyfikowanie widoku formularzy danych, tak aby wyświetlały informacje o błędach odkrytych podczas weryfikacji danych (th:errors="*{name}")
+ *
+ *           <label for="street">Ulica</label>
+ *           <input id="street" th:field="*{street}">
+ *           <span th:if="${#fields.hasErrors()}" th:errors="*{street}"></span>
  */
 
 @Data

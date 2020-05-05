@@ -10,7 +10,7 @@ xmlns:th="http://www.thymeleaf.org">
 <img th:src="@{/images/pizza-cloud.png}">
 <h1>Skomponuj własną pizzę</h1>
 
-<form method="post" th:object="${design}">
+<form method="post" th:action="@{/design}" th:object="${design}">
     <div>
         <span th:if="${#fields.hasErrors('ingredients')}" th:errors="*{ingredients}">Nie wybrano składników</span>
     </div>
@@ -52,9 +52,10 @@ xmlns:th="http://www.thymeleaf.org">
     </div>
 </div>
     <h3>Nadaj nazwę swojej pizzy</h3>
-    <input type="text" th:field="*{name}">
+    <label for="name">Nadaj nazwę swojej pizzy</label>
+    <input id="name" type="text" th:field="*{name}">
     <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Błąd nazwy</span>
-    <button>Wyślij zamówienie</button>
+    <input type="submit" value="Wyślij zamówienie">
 </form>
 </body>
 </html>

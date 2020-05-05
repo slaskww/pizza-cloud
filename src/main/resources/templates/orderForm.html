@@ -17,36 +17,43 @@ xmlns:th="http://www.thymeleaf.org">
     <h3>Adres dostawy zamówienia</h3>
     <label for="name">Imię i nazwisko</label>
     <input id="name" th:field="*{name}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{name}"></span>
     <br/>
 
     <label for="street">Ulica</label>
     <input id="street" th:field="*{street}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{street}"></span>
     <br/>
 
     <label for="city">Miasto</label>
     <input id="city" th:field="*{city}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{city}"></span>
     <br/>
 
     <label for="state">Wojewodztwo</label>
     <input id="state" th:field="*{state}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{state}"></span>
     <br/>
 
     <label for="postCode">Kod pocztowy</label>
     <input id="postCode" th:field="*{postCode}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{postCode}"></span>
     <br/>
 
     <label for="creditCardNo">Numer karty kredytowej</label>
     <input id="creditCardNo" th:field="*{creditCardNo}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{creditCardNo}"></span>
     <br/>
 
     <label for="creditCardExp">Ważność karty kredytowej</label>
     <input id="creditCardExp" th:field="*{creditCardExp}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{creditCardExp}"></span>
     <br/>
 
     <label for="creditCardCvv">Kod CVV</label>
     <input id="creditCardCvv" th:field="*{creditCardCvv}">
+    <span th:if="${#fields.hasErrors()}" th:errors="*{creditCardCvv}"></span>
     <br/>
-
     <input type="submit" value="Złóż zamówienie">
 </form>
 </body>
