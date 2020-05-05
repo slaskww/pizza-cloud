@@ -13,6 +13,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Koncepcja klasay kontrolera (obsługującej żądania HTTP) jest 'centrum' frameworka internetowego Spring MVC
+ * Adnotacja Controller nad klasą oznacza tę klasę jako komponent. Mechanizm skanowania komponentów Springa odnajdzie tę klase i utworzy
+ * egzemplarz HomeController jako komponent bean w kontekście Springa
+ * Adnotacja @RequestMapping określa, że po wygenerowaniu żądania HTTP Get do ścieżki "/design", to metod home obsłuży to żądanie.
+ * Metoda showDesignForm() zwraca łańcuch String, który interpretowany jest jako logiczna nazwa widoku (domnyślnie /templates/nazwa.html).
+ */
 
 @Controller
 @RequestMapping("/design")
