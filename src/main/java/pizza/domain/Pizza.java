@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,7 +23,8 @@ import java.util.List;
 @Data
 public class Pizza {
 
-    private String id;
+    private Long id;
+    private Date createdAt;
     @NotNull
     @Size(min = 5, message = "Nazwa powinna zawierać co najmniej 5 znaków")
     private String name;

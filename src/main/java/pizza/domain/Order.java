@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 /**
  * API Java Bean Validation pozwala na sprawne zadeklarowanie regół walidacji danych w obiektach domeny, zwalniając nas
@@ -23,8 +24,8 @@ import javax.validation.constraints.Pattern;
 @Data
 public class Order {
 
-    private String id;
-
+    private Long id;
+    private Date orderedAt;
     @NotBlank(message = "Podaj imię i nazwisko")
     private String name;
     @NotBlank(message = "Podaj ulicę dostawy")
