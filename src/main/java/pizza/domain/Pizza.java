@@ -29,5 +29,5 @@ public class Pizza {
     @Size(min = 5, message = "Nazwa powinna zawierać co najmniej 5 znaków")
     private String name;
     @Size(min = 1, message = "Wybierz co najmniej jeden składnik")
-    private List<String> ingredients = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
 }
