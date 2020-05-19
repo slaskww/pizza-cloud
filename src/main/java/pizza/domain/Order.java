@@ -3,9 +3,12 @@ package pizza.domain;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,13 +23,31 @@ import java.util.List;
  *           <label for="street">Ulica</label>
  *           <input id="street" th:field="*{street}">
  *           <span th:if="${#fields.hasErrors()}" th:errors="*{street}"></span>
+ *
+ *  Chcąc zadeklarowac klasę jako encję JPA, musimy oznaczyć ją adnotacją @ Entity.
+ *  Adnotacja @ Table została użyta, by wskazać JPA, by zapisał encję do tabeli Pizza_Order.  Bez tej adnotacji domyślnym działaniem byłoby zapisanie encji Order w tabeli
+ *  o nazwie takiej nak nazwa klasy. Słowo ORDER jest zarezerwowane w SQL i jego użycie w kontekście nazwy tabeli może powodować problemy.
+ *
+ *  Kolejną rzeczą jest oznaczenie właściwości będącej identyfikatorem encji adnotacją @ Id
+ *  Adnotacja @ GeneratedValue z atrybutem AUTO spowoduje, że baza danych zostanie użyta do automatycznego wygenerowania wartości identyfikatora.
+ *
+ *  Adnotacja @ ManyToMany deklaruje związek między obiektem Order a listą obiektów Pizza.
+ *  Taka relacja wiele-do-wiele oznacza, że obiekt Order może być powiązany z wieloma obiektami Pizza. Obiekt Pizza możebyć natomiast powiązany z wieloma obiektami Order
+ *
+ *  Adnotacja @ PrePersist sprawi, że metoda zostanie uruchomiona, a w konswkwencji przypisana zostanie wartość właściwości orderedAt, zanim nastąpi trwały zapis obiektu Order.
  */
 
 @Data
-public class Order {
+@Entity
+@Table(name = "Pizza_Order")
+public class Order implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private Date orderedAt;
+
     @NotBlank(message = "Podaj imię i nazwisko")
     private String name;
     @NotBlank(message = "Podaj ulicę dostawy")
@@ -43,5 +64,17 @@ public class Order {
     @Digits(integer = 3, fraction = 0, message = "Podaj poprawny numer kodu CVV")
     private String creditCardCvv;
 
-    private List<Pizza> design;
+    @ManyToMany(targetEntity = Pizza.class)
+    private List<Pizza> design = new ArrayList<>();
+
+    public void addDesign(Pizza pizza){
+        this.design.add(pizza);
+    }
+
+    private Date orderedAt;
+
+    @PrePersist
+    void orderedAt(){
+        this.orderedAt = new Date();
+    }
 }
