@@ -1,4 +1,4 @@
-package pizza.repositories;
+package pizza.repositories.jdbc;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -15,11 +15,11 @@ import java.util.Arrays;
 import java.util.Date;
 
 @Repository
-public class JdbcPizzaRepository implements PizzaRepository{
+public class ImplJdbcJdbcPizzaRepository implements JdbcPizzaRepository {
 
     private JdbcTemplate jdbcTemplate;
 
-    public JdbcPizzaRepository(JdbcTemplate jdbcTemplate) {
+    public ImplJdbcJdbcPizzaRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

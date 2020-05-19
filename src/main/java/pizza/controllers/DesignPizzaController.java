@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import pizza.domain.Ingredient;
 import pizza.domain.Order;
 import pizza.domain.Pizza;
-import pizza.repositories.IngredientRepository;
-import pizza.repositories.PizzaRepository;
+import pizza.repositories.jdbc.JdbcIngredientRepository;
+import pizza.repositories.jdbc.JdbcPizzaRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 @SessionAttributes("order")
 public class DesignPizzaController {
 
-    private final IngredientRepository ingredientRepository;
-    private final PizzaRepository pizzaRepository;
+    private final JdbcIngredientRepository jdbcIngredientRepository;
+    private final JdbcPizzaRepository jdbcPizzaRepository;
 
     @Autowired
-    public DesignPizzaController(IngredientRepository ingredientRepository, PizzaRepository pizzaRepository) {
-        this.ingredientRepository = ingredientRepository;
-        this.pizzaRepository = pizzaRepository;
+    public DesignPizzaController(JdbcIngredientRepository jdbcIngredientRepository, JdbcPizzaRepository jdbcPizzaRepository) {
+        this.jdbcIngredientRepository = jdbcIngredientRepository;
+        this.jdbcPizzaRepository = jdbcPizzaRepository;
     }
 
     @ModelAttribute(name = "design")
@@ -55,7 +55,7 @@ public class DesignPizzaController {
     public String showDesignForm(Model model){
 
        List<Ingredient> ingredients = new ArrayList<>();
-       ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
+       jdbcIngredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
 
        Ingredient.Type[] types = Ingredient.Type.values();
        for (Ingredient.Type type : types){
@@ -72,7 +72,7 @@ public class DesignPizzaController {
             log.info("błąd" + errors.getFieldErrors());
             log.info("pizza contains: " + design.toString());
             List<Ingredient> ingredients = new ArrayList<>();
-            ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
+            jdbcIngredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
 
             Ingredient.Type[] types = Ingredient.Type.values();
             for (Ingredient.Type type : types){
@@ -82,7 +82,7 @@ public class DesignPizzaController {
         }
 
         log.info("Przetwarzanie projektu pizzy " + design.getName() + " z liczbą składników: " + design.getIngredients().size());
-       Pizza saved = pizzaRepository.save(design);
+       Pizza saved = jdbcPizzaRepository.save(design);
        order.getDesign().add(saved);
         return "redirect:/orders/current";
     }

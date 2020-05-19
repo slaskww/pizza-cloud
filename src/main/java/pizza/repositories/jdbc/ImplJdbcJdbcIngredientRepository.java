@@ -1,18 +1,19 @@
-package pizza.repositories;
+package pizza.repositories.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import pizza.domain.Ingredient;
+import pizza.repositories.jdbc.JdbcIngredientRepository;
 
 
 @Repository
-public class JdbcIngredientRepository implements IngredientRepository {
+public class ImplJdbcJdbcIngredientRepository implements JdbcIngredientRepository {
 
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JdbcIngredientRepository(JdbcTemplate jdbcTemplate) {
+    public ImplJdbcJdbcIngredientRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

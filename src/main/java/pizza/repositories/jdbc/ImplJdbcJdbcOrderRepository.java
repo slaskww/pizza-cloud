@@ -1,10 +1,10 @@
-package pizza.repositories;
+package pizza.repositories.jdbc;
 
 import org.springframework.stereotype.Repository;
 import pizza.domain.Order;
 
 @Repository
-public class JdbcOrderRepository implements OrderRepository {
+public class ImplJdbcJdbcOrderRepository implements JdbcOrderRepository {
     @Override
     public Order save(Order order) {
         return null;

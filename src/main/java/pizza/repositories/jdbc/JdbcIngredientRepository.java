@@ -1,8 +1,8 @@
-package pizza.repositories;
+package pizza.repositories.jdbc;
 
 import pizza.domain.Ingredient;
 
-public interface IngredientRepository {
+public interface JdbcIngredientRepository {
 
     Iterable<Ingredient> findAll();
     Ingredient findById(String id);
