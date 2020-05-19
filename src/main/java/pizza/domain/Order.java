@@ -7,6 +7,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.List;
 
 /**
  * API Java Bean Validation pozwala na sprawne zadeklarowanie regół walidacji danych w obiektach domeny, zwalniając nas
@@ -42,5 +43,5 @@ public class Order {
     @Digits(integer = 3, fraction = 0, message = "Podaj poprawny numer kodu CVV")
     private String creditCardCvv;
 
-
+    private List<Pizza> design;
 }

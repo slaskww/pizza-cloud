@@ -7,8 +7,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import pizza.domain.Ingredient;
+import pizza.domain.Order;
 import pizza.domain.Pizza;
 import pizza.repositories.IngredientRepository;
+import pizza.repositories.PizzaRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -31,10 +33,22 @@ import java.util.stream.Collectors;
 public class DesignPizzaController {
 
     private final IngredientRepository ingredientRepository;
+    private final PizzaRepository pizzaRepository;
 
     @Autowired
-    public DesignPizzaController(IngredientRepository ingredientRepository) {
+    public DesignPizzaController(IngredientRepository ingredientRepository, PizzaRepository pizzaRepository) {
         this.ingredientRepository = ingredientRepository;
+        this.pizzaRepository = pizzaRepository;
+    }
+
+    @ModelAttribute(name = "design")
+    public Pizza pizza(){
+        return new Pizza();
+    }
+
+    @ModelAttribute(name = "order")
+    public Order order(){
+        return new Order();
     }
 
     @GetMapping
@@ -47,14 +61,16 @@ public class DesignPizzaController {
        for (Ingredient.Type type : types){
            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
        }
-        model.addAttribute("design", new Pizza());
+       model.addAttribute("design", new Pizza());
         return "design";
     }
     @PostMapping
-    public String processDesignForm(@Valid @ModelAttribute("design") Pizza design, Errors errors, Model model){
+    public String processDesignForm(@Valid @ModelAttribute("design") Pizza design, Errors errors, Model model, @ModelAttribute Order order){
 
         if(errors.hasErrors()){
 
+            log.info("błąd" + errors.getFieldErrors());
+            log.info("pizza contains: " + design.toString());
             List<Ingredient> ingredients = new ArrayList<>();
             ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
 
@@ -66,6 +82,8 @@ public class DesignPizzaController {
         }
 
         log.info("Przetwarzanie projektu pizzy " + design.getName() + " z liczbą składników: " + design.getIngredients().size());
+       Pizza saved = pizzaRepository.save(design);
+       order.getDesign().add(saved);
         return "redirect:/orders/current";
     }
 

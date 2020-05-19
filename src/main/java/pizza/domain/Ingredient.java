@@ -2,7 +2,6 @@ package pizza.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 /**
  * Adnotacja @ Data z biblioteki Lombok nakazuje wygenerowanie wszystkich brakujacych metod klasy:

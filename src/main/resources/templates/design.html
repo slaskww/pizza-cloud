@@ -18,35 +18,35 @@ xmlns:th="http://www.thymeleaf.org">
     <div >
         <h3>Wybierz ciasto</h3>
         <div th:each="ingredient : ${dough}">
-            <input name="ingredients" type="checkbox" th:value="${ingredient.id}">
+            <input th:name="ingredients" th:type="checkbox" th:value="${ingredient.id}">
             <span th:text="${ingredient.name}">Skladnik</span>
         </div>
     </div>
     <div>
         <h3>Wybierz mięso</h3>
         <div th:each="ingredient : ${meat}">
-            <input name="ingredients" type="checkbox" th:value="${ingredient.id}">
+            <input th:name="ingredients" th:type="checkbox" th:value="${ingredient.id}">
             <span th:text="${ingredient.name}">Skladnik</span>
         </div>
     </div>
     <div>
         <h3>Wybierz sery</h3>
         <div th:each="ingredient : ${cheese}">
-            <input name="ingredients" type="checkbox" th:value="${ingredient.id}">
+            <input th:name="ingredients" th:type="checkbox" th:value="${ingredient.id}">
             <span th:text="${ingredient.name}">Skladnik</span>
         </div>
     </div>
     <div>
         <h3>Wybierz warzywa</h3>
         <div th:each="ingredient : ${vegetable}">
-            <input name="ingredients" type="checkbox" th:value="${ingredient.id}">
+            <input th:name="ingredients" th:type="checkbox" th:value="${ingredient.id}">
             <span th:text="${ingredient.name}">Skladnik</span>
         </div>
     </div>
     <div>
         <h3>Wybierz sosy</h3>
         <div th:each="ingredient : ${sauce}">
-            <input name="ingredients" type="checkbox" th:value="${ingredient.id}">
+            <input th:name="ingredients" th:type="checkbox" th:value="${ingredient.id}">
             <span th:text="${ingredient.name}">Skladnik</span>
         </div>
     </div>
