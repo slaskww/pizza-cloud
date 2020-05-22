@@ -17,8 +17,10 @@ import java.util.Collection;
 
 /**
  * Klasa User reprezentuje nowo zarejestrowanego użytkownika.
- * Klasa ta implementuje interfejs UserDetails, kóry dostarczy frameworkowi Spring Security pewne informacje
- * o użytkowniku (getAutorities() dostarcza info o uprawnieniach usera, inne - informacje o tym, czy konto jest aktywne, a także login i hasło)
+ * Klasa ta implementuje interfejs UserDetails pochodzącą ze Spring Security, kóry dostarczy frameworkowi pewne informacje
+ * o użytkowniku (getAutorities() dostarcza info o uprawnieniach usera, inne - informacje o tym, czy konto jest aktywne, a także login i hasło).
+ * Dzięki temu, że nasz User implementuje interfejs UserDetails, możemy jego egzemplarz dostarczyć do klasy UserRepositoryUserDetailsService, która z kolei
+ * zostanie wykorzystana w konfiguracji wewnątrz klasy SecurityConfig
  *
  */
 
