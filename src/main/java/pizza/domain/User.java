@@ -26,7 +26,7 @@ import java.util.Collection;
 
 @Data
 @Entity
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+//@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @RequiredArgsConstructor
 public class User implements UserDetails {
 
@@ -42,6 +42,17 @@ public class User implements UserDetails {
     private String state;
     private String zipCode;
     private String phoneNumber;
+
+    public User(String username, String password, String fullName, String street, String city, String state, String zipCode, String phoneNumber) {
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zipCode = zipCode;
+        this.phoneNumber = phoneNumber;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
