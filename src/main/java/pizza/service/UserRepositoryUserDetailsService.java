@@ -8,6 +8,7 @@ import pizza.domain.User;
 import pizza.repositories.jpa.UserRepository;
 
 /**
+ * Mając implementację interfejsu UserDetails oraz repozytorium UserRepository, możemy zaimplementować interfejs serwisu userdetails.
  * Nasz Serwis implementuje inerfejs UserDetailsService ze Spring Security i nadpisuje metode loadUserByUsername().
  * Metoda zwraca typ UserDetails, więc możemy zwrócić instancję naszej klasy User, która implementuje interfejs UserDetails.
  * Metoda nie może zwrócić wartości null, stąd jeśli wynikiem wywołania metody z repozytorium będzie wartość null, metoda zgłosi wyjątek
