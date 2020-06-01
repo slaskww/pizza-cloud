@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * Metoda addViewControllers() służy do rejestracji nowych kontrolerów widoku.
  * W ten sposób możemy zastąpić tradycyjny kontroler widoku HomeController.
  * Dla większoścli kontrolerów wzorzec klasy kontrolera będzie lepszym rozwiązaniem.
- * Jednak w przypadku, gdy kontroler jest prosty, nie wypełnia danych modeku ani nie przetwarza danych wejściowych, można skorzystać z rejestratora.
+ * Jednak w przypadku, gdy kontroler jest prosty, nie wypełnia danych modelu ani nie przetwarza danych wejściowych, można skorzystać z rejestratora.
  */
 
 @Configuration
@@ -20,6 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("home");
+        registry.addViewController("/login");
     }
 
 

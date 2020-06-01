@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza Cloud</title>
+</head>
+<body>
+<h1>Logowanie</h1>
+<img th:src="@{/images/pizza-cloud.png}">
+<div th:if="${error}">
+    Logowanie niepoprawne. Sprawdź poprawność nazwy użytkownika i hasła
+</div>
+
+<p>
+    Jesteś nowy? Kliknij <a th:href="@{/register}">tutaj</a>, aby się zarejestrować.
+</p>
+
+<form method="post" th:action="@{/login}">
+    <label th:for="username">Nazwa użytkownika</label>
+    <input type="text" name="username" id="username">
+    <label th:for="password">Hasło</label>
+    <input type="password" name="password" id="password">
+
+    <input type="submit" value="Zaloguj">
+</form>
+</body>
+</html>
