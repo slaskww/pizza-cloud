@@ -1,10 +1,4 @@
 
-delete from Pizza_Order_Pizzas;
-delete from Pizza_Ingredients;
-delete from Pizza;
-delete from Pizza_Order;
-delete from Ingredient;
-
 insert into Ingredient(id, name, type) values('DC', 'Corn', 'DOUGH');
 insert into Ingredient(id, name, type) values('CM', 'Mozarella', 'CHEESE');
 insert into Ingredient(id, name, type) values('DW', 'Wheat', 'DOUGH');

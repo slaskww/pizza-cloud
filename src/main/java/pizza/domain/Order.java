@@ -73,6 +73,10 @@ public class Order implements Serializable {
 
     private Date orderedAt;
 
+    @ManyToOne
+    private User user;
+
+
     @PrePersist
     void orderedAt(){
         this.orderedAt = new Date();
