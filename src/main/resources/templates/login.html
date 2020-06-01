@@ -22,6 +22,8 @@
     <label th:for="password">Hasło</label>
     <input type="password" name="password" id="password">
 
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
     <input type="submit" value="Zaloguj">
 </form>
 </body>

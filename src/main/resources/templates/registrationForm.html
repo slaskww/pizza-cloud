@@ -39,6 +39,8 @@
     <label th:for="phone">Telefon</label>
     <input type="text" name="phone">
 
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">
+
     <input type="submit" value="Zarejestruj">
 </form>
 
