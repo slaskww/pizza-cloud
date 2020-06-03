@@ -21,6 +21,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * Metoda zwracająca instancję PasswordEncoder jest oznaczona adnotacją @ Bean, zostanie więc użyta do stworzenia beana BCryptPasswordEncoder w kontekście
  * aplikacji Stringa. Wywołanie metody encoder() w metodzie configure() zostanie przechwycone i zostanie zwrócony egzemplarz komponentu beana BCryptPasswordEncoder
  * z kontekstu aplikacji Springa.
+ *
+ * Klasa konfigurująca mechanizm zabezpieczeń webowych w naszej aplikacji odpowiada za uwierzytelnienie użytkownika oraz jego autoryzacje.
+ * W naszej aplikacji obowiązują pewne reguły wedle których niektóre zasoby, tj. strona główna, strona rejestracji nowego użytkownika i strona logowania
+ * powinny być dostępne również dla nieuwierzytelnionych użytkowników aplikacji. Konfigurację mechanizmu zabezpieczeń na poziomie sieci dostarczamy w metodzie
+ * configure() przyjmującej jako parametr obiekt HttpSecurity. HttpSecurity umożliwia skonfigurowanie:
+ *  -wymagań, które musza być spełnione, aby żądanie HTTP zostało wykonane (np. przy użyciu metody access("SpEL") i reguł opartych na Spring Expression Language)
+ *  -niestandardowej strony logowania (metoda formLogin() i loginPage() ze ścieżką dostępu do strony logowania,
+ *      utworzeniem kontrolera obsługującego żądania HTTP w tej ścieżce zajmie się klasa WebConfig)
+ *  -możliwości wylogowania się użytkownika z aplikacji
+ *  -zabezpieczenia przed atakami typu cross-site request forgery
+ *
  */
 
 @Configuration

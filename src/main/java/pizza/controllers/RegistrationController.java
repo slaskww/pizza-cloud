@@ -12,6 +12,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import pizza.dto.RegistrationForm;
 import pizza.repositories.jpa.UserRepository;
 
+/**
+ * Kontroler będzie odpowiedzialny za realizację zadania rejestracji nowego użytkownika.
+ * Metoda processRegistration() obsługująca żądanie POST otrzyma w danych żądania obiekt RegistrationForm.
+ * Jest to obiekt, który zostanie dodany jako atrybut widoku,  wypełniony danymi z formularza rejestracyjnego i odesłany w żądaniu POST.
+ * Klasa ta reprezentuje obiekt transferowy (DTO), który posiada wszystkie niezbędne pola nowo zarejestrowanego użytkownika.
+ * Posiada także metodę toUser() mapującą obiekt DTO na obiekt domeny. Klasę RegistrationForm tworzymy w dalszej kolejności.
+ * Następnie wykorzystujemy repozytorium użytkownika by utwalić nowy obiekt User w bazie danych.
+ */
+
 @Slf4j
 @Controller
 @RequestMapping("/register")

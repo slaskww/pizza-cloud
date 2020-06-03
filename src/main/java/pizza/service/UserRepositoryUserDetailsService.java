@@ -13,7 +13,7 @@ import pizza.repositories.jpa.UserRepository;
  * Metoda zwraca typ UserDetails, więc możemy zwrócić instancję naszej klasy User, która implementuje interfejs UserDetails.
  * Metoda nie może zwrócić wartości null, stąd jeśli wynikiem wywołania metody z repozytorium będzie wartość null, metoda zgłosi wyjątek
  * UsernameNotFoundException.
- * Nasz serwis w postaci komponentu bean zostanie wstrzyknięty w klasie SecurityConfig
+ * Nasz serwis w postaci komponentu bean zostanie wstrzyknięty w klasie konfiguracyjnej SecurityConfig i wykorzystany w metodzie auth.userDetailsService().
  *
  */
 
