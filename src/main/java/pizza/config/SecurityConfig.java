@@ -29,8 +29,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  *  -wymagań, które musza być spełnione, aby żądanie HTTP zostało wykonane (np. przy użyciu metody access("SpEL") i reguł opartych na Spring Expression Language)
  *  -niestandardowej strony logowania (metoda formLogin() i loginPage() ze ścieżką dostępu do strony logowania,
  *      utworzeniem kontrolera obsługującego żądania HTTP w tej ścieżce zajmie się klasa WebConfig)
- *  -możliwości wylogowania się użytkownika z aplikacji
- *  -zabezpieczenia przed atakami typu cross-site request forgery
+ *  -możliwości wylogowania się użytkownika z aplikacji (metody logout().logoutSuccessUrl("/login") powodują powstanie filtra przechwytującego żądanie POST  do '/logout'
+ *      i usunięcie bieżącej sesji użytkownika. Aby żądanie mogło być wywołane, musimy umieścić w widokach aplikacji formularz wylogowania i przycisk. )
+ *  -zabezpieczenia przed atakami typu cross-site request forgery (Spring Security ma wbudowany mechanizm zabezpieczenia przed atakami csrf i jest on automatycznie włączany do aplikacji
+ *      Jedyne, co trzeba zrobić to dołączyć do formularzy widoków pole '_csrf' przeznaczone dla tokena CSRF.
+ *      Polecenie w szablonie Thymeleaf: <input type="hidden" name="_csrf" th:value="${_csrf.token}"/> wygeneruje token i umieści go w atrybucie żądania)
  *
  */
 
@@ -59,13 +62,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/design", "/orders").hasRole("USER")
+                .antMatchers("/design", "/orders", "/orders/**").hasRole("USER")
                 .antMatchers("/", "/**").permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/design")
+                .loginPage("/login").defaultSuccessUrl("/design", true)
                 .and()
-                .logout().logoutSuccessUrl("/")
+                .logout().logoutSuccessUrl("/login")
         ;
     }
 
