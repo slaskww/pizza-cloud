@@ -34,7 +34,7 @@ import java.util.List;
  *  Adnotacja @ ManyToMany deklaruje związek między obiektem Order a listą obiektów Pizza.
  *  Taka relacja wiele-do-wiele oznacza, że obiekt Order może być powiązany z wieloma obiektami Pizza. Obiekt Pizza możebyć natomiast powiązany z wieloma obiektami Order
  *
- *  Adnotacja @ PrePersist sprawi, że metoda zostanie uruchomiona, a w konswkwencji przypisana zostanie wartość właściwości orderedAt, zanim nastąpi trwały zapis obiektu Order.
+ *  Adnotacja @ PrePersist sprawi, że metoda zostanie uruchomiona, a w konsekwencji przypisana zostanie wartość właściwości orderedAt, zanim nastąpi trwały zapis obiektu Order.
  */
 
 @Data
@@ -75,7 +75,6 @@ public class Order implements Serializable {
 
     @ManyToOne
     private User user;
-
 
     @PrePersist
     void orderedAt(){

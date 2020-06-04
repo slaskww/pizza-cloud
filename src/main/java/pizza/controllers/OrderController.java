@@ -15,7 +15,16 @@ import pizza.repositories.jpa.JpaOrderRepository;
 
 import javax.validation.Valid;
 
-
+/**
+ * Metoda processOrder odpowiada za zapisanie zamówienia. Przed utrwaleniem obiektu w bazie danych, ustawiamy pole 'user' dla tego zamównienia.
+ * Wiadomo, że zamówienie zostaje złożone przez zalogowanego użytkownika, więc danę tą pobieramy z obiektu kontekstowego Springa.
+ * Istnieje kilka sposobów na ustalenie kim jest zalogowany użytkownik:
+ *  - wstrzyknięcie obiektu Principal do metody processOrderForm(), wywołanie na nim metody getName(), pobranie nazwy użytkownika i przy pomocy UserReposotory pobranie Usera z bazy danych,
+ *  - wstrzyknięcie obiektu Authentication do metody processOrderForm(), wywołanie na nim metody getPrincipal() i rzutowanie zwracanego obiektu typu Object na typ User
+ *  - użycie SecurityContextHolder i getContext(), aby pobrać obiekt kontekstu bezpieczeństwa (SecurityContext) a z niego obiekt Authentication, i dalej wywołac na nim metodę getPrincipal() zwracającą obiekt typu Object dalej rzutowaną na typ User
+ *      Wersja z użyciem SecurityContextHolder ma tę przewagę, że można jej użyyć w dowolnym fragmencie kodu aplikacji (nie tylko w metodach kontrolera)
+*   - użycie adnotacji @ AuthenticationPrincipal dla obiektu User w metodzie processOrderForm(),
+ */
 
 @Slf4j
 @Controller
