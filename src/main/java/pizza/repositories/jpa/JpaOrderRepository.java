@@ -1,9 +1,11 @@
 package pizza.repositories.jpa;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pizza.domain.Order;
+import pizza.domain.User;
 
 import java.util.Date;
 import java.util.List;
@@ -30,6 +32,7 @@ import java.util.List;
 public interface JpaOrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findOrdersByNameOrderByOrderedAt(String name);
+    List<Order> findOrdersByUserOrderByOrderedAtDesc(User user, Pageable pageable);
     List<Order> getOrdersByPostCodeAndOrderedAtBetween(String postCode, Date startDate, Date endDate);
     int countOrdersByName(String name);
 

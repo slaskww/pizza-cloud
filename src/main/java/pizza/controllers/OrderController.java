@@ -1,6 +1,8 @@
 package pizza.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,12 +10,15 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import pizza.domain.Order;
 import pizza.domain.User;
+import pizza.props.config.OrderProps;
 import pizza.repositories.jpa.JpaOrderRepository;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Metoda processOrder odpowiada za zapisanie zamówienia. Przed utrwaleniem obiektu w bazie danych, ustawiamy pole 'user' dla tego zamównienia.
@@ -24,16 +29,23 @@ import javax.validation.Valid;
  *  - użycie SecurityContextHolder i getContext(), aby pobrać obiekt kontekstu bezpieczeństwa (SecurityContext) a z niego obiekt Authentication, i dalej wywołac na nim metodę getPrincipal() zwracającą obiekt typu Object dalej rzutowaną na typ User
  *      Wersja z użyciem SecurityContextHolder ma tę przewagę, że można jej użyyć w dowolnym fragmencie kodu aplikacji (nie tylko w metodach kontrolera)
 *   - użycie adnotacji @ AuthenticationPrincipal dla obiektu User w metodzie processOrderForm(),
+ *
+ *   W klasie kontrolera wstrzykujemy komponent OrderProps, który przejał na siebie konfigurację właściwości pageSize.
+ *   chcąc odnieść się do wartości tej właściwości, korzystamy właśnie z tego komponentu.
+ *
  */
 
 @Slf4j
 @Controller
+@SessionAttributes("order")
 @RequestMapping("/orders")
 public class OrderController {
 
+    private final OrderProps orderProps;
     private final JpaOrderRepository orderRepository;
 
-    public OrderController(JpaOrderRepository orderRepository) {
+    public OrderController(OrderProps orderProps, JpaOrderRepository orderRepository) {
+        this.orderProps = orderProps;
         this.orderRepository = orderRepository;
     }
 
@@ -53,5 +65,16 @@ public class OrderController {
         orderRepository.save(order);
         sessionStatus.isComplete();
         return "redirect:/";
+    }
+
+    @GetMapping
+    public String ordersByUser(@AuthenticationPrincipal User user, Model model){
+
+        Pageable pageable =  PageRequest.of(0,orderProps.getPageSize());
+        List<Order> orders = orderRepository.findOrdersByUserOrderByOrderedAtDesc(user, pageable);
+        log.info("Orders: " + orders.size());
+        model.addAttribute("orders", orders);
+
+        return "orderList";
     }
 }
