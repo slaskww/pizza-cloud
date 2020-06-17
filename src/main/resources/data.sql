@@ -1,4 +1,3 @@
-
 insert into Ingredient(id, name, type) values('DC', 'Corn', 'DOUGH');
 insert into Ingredient(id, name, type) values('CM', 'Mozarella', 'CHEESE');
 insert into Ingredient(id, name, type) values('DW', 'Wheat', 'DOUGH');
