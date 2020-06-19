@@ -1,12 +1,14 @@
 package pizza.webapi;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pizza.domain.Pizza;
+import pizza.repositories.jpa.JpaOrderRepository;
 import pizza.repositories.jpa.JpaPizzaRepository;
 
 import java.util.Optional;
@@ -18,9 +20,11 @@ import java.util.Optional;
 public class DesignPizzaRestController {
 
     private  JpaPizzaRepository jpaPizzaRepository;
+    private JpaOrderRepository jpaOrderRepository;
 
-    public DesignPizzaRestController(JpaPizzaRepository jpaPizzaRepository) {
+    public DesignPizzaRestController(JpaPizzaRepository jpaPizzaRepository, JpaOrderRepository jpaOrderRepository) {
         this.jpaPizzaRepository = jpaPizzaRepository;
+        this.jpaOrderRepository = jpaOrderRepository;
     }
 
     @GetMapping(path = "/recent")
@@ -42,5 +46,14 @@ public class DesignPizzaRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public Pizza postPizza(@RequestBody Pizza pizza){
         return jpaPizzaRepository.save(pizza);
+    }
+
+
+   @DeleteMapping("/{orderId}")
+   @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteOrder(@PathVariable Long orderId){
+     try{
+         jpaOrderRepository.deleteById(orderId);
+     } catch (EmptyResultDataAccessException e){}
     }
 }

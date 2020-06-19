@@ -53,7 +53,9 @@ public class DesignPizzaController {
     }
 
     @GetMapping
-    public String showDesignForm(Model model){
+    public String showDesignForm(Model model, Order order){
+        log.info("showDesignForm/pizzas:" + order.getDesigns().size() + "ordername:" + order.getName());
+
 
        List<Ingredient> ingredients = new ArrayList<>();
        ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
@@ -62,14 +64,11 @@ public class DesignPizzaController {
        for (Ingredient.Type type : types){
            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
        }
-       model.addAttribute("design", new Pizza());
         return "design";
     }
     @PostMapping
-    public String processDesignForm(@Valid @ModelAttribute("design") Pizza design, Errors errors, Model model, @ModelAttribute Order order){
-
+    public String processDesignForm(@Valid @ModelAttribute("design") Pizza design, Errors errors, Model model, Order order){
         if(errors.hasErrors()){
-
             log.info("błąd" + errors.getFieldErrors());
             log.info("pizza contains: " + design.toString());
             List<Ingredient> ingredients = new ArrayList<>();
@@ -84,7 +83,7 @@ public class DesignPizzaController {
 
         log.info("Przetwarzanie projektu pizzy " + design.getName() + " z liczbą składników: " + design.getIngredients().size());
        Pizza saved = pizzaRepository.save(design);
-       order.getDesign().add(saved);
+       order.addDesign(saved);
         return "redirect:/orders/current";
     }
 

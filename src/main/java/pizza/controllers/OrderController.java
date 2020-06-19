@@ -50,18 +50,18 @@ public class OrderController {
     }
 
     @GetMapping("/current")
-    public String showOrderForm(Model model){
-        model.addAttribute("order", new Order());
+    public String showOrderForm(Order order, @AuthenticationPrincipal User user){
+       // model.addAttribute("order", new Order());
+        order.setUser(user);
+        order.fillWithUserData();
         return "orderForm";
     }
 
     @PostMapping
-    public String processOrderForm(@Valid Order order, Errors errors, SessionStatus sessionStatus,  @AuthenticationPrincipal User user){
+    public String processOrderForm(@Valid Order order, Errors errors, SessionStatus sessionStatus){
         if(errors.hasErrors()){
             return "orderForm";
         }
-
-        order.setUser(user);
         orderRepository.save(order);
         sessionStatus.isComplete();
         return "redirect:/";
@@ -69,10 +69,8 @@ public class OrderController {
 
     @GetMapping
     public String ordersByUser(@AuthenticationPrincipal User user, Model model){
-
         Pageable pageable =  PageRequest.of(0,orderProps.getPageSize());
         List<Order> orders = orderRepository.findOrdersByUserOrderByOrderedAtDesc(user, pageable);
-        log.info("Orders: " + orders.size());
         model.addAttribute("orders", orders);
 
         return "orderList";

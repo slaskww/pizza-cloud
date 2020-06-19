@@ -5,9 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * API Java Bean Validation pozwala na sprawne zadeklarowanie regół walidacji danych w obiektach domeny, zwalniając nas
@@ -49,6 +47,10 @@ public class Pizza {
     private List<Ingredient> ingredients = new ArrayList<>();
 
     private Date createdAt;
+
+    @ManyToMany(mappedBy = "designs")
+    private List<Order> orders = new ArrayList<>();
+
 
     @PrePersist
     void createdAt(){

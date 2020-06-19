@@ -8,9 +8,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * API Java Bean Validation pozwala na sprawne zadeklarowanie regół walidacji danych w obiektach domeny, zwalniając nas
@@ -64,17 +62,35 @@ public class Order implements Serializable {
     @Digits(integer = 3, fraction = 0, message = "Podaj poprawny numer kodu CVV")
     private String creditCardCvv;
 
-    @ManyToMany(targetEntity = Pizza.class)
-    private List<Pizza> design = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "Pizza_Order_Design",
+                joinColumns = @JoinColumn(name = "order_id"),
+                inverseJoinColumns = @JoinColumn(name = "design_id")
+                )
+    private List<Pizza> designs = new ArrayList<>();
 
     public void addDesign(Pizza pizza){
-        this.design.add(pizza);
+        this.designs.add(pizza);
+        pizza.getOrders().add(this);
+    }
+
+    public void removeDesign(Pizza pizza){
+        this.designs.remove(pizza);
+        pizza.getOrders().remove(this);
     }
 
     private Date orderedAt;
 
     @ManyToOne
     private User user;
+
+    public void fillWithUserData(){
+        this.name = user.getFullName();
+        this.street = user.getStreet();
+        this.city = user.getCity();
+        this.state = user.getState();
+        this.postCode = user.getZipCode();
+    }
 
     @PrePersist
     void orderedAt(){
