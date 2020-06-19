@@ -31,6 +31,12 @@ import java.util.*;
  *
  *  Adnotacja @ ManyToMany deklaruje związek między obiektem Order a listą obiektów Pizza.
  *  Taka relacja wiele-do-wiele oznacza, że obiekt Order może być powiązany z wieloma obiektami Pizza. Obiekt Pizza możebyć natomiast powiązany z wieloma obiektami Order
+ *  Atrybut cascade = CascadeType.REMOVE spowoduje kaskadowe usunięcie obiektów Pizza przypisanych do zamówienia po usunięciu obiektu Order.
+ *  Adnotacja @JoinTable(name = "Pizza_Order_Design") spowoduje utworzenie pomocniczej tabeli Pizza_Order_Design, której wierszami będą  "order_id" jako klucz obcy  z encji Pizza_Order
+ *  oraz  design_id jako klucz obcy  z encji Pizza.
+ *                  joinColumns = @JoinColumn(name = "order_id"),
+ *                  inverseJoinColumns = @JoinColumn(name = "design_id")
+ *
  *
  *  Adnotacja @ PrePersist sprawi, że metoda zostanie uruchomiona, a w konsekwencji przypisana zostanie wartość właściwości orderedAt, zanim nastąpi trwały zapis obiektu Order.
  */
