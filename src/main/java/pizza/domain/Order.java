@@ -1,5 +1,6 @@
 package pizza.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
@@ -39,6 +40,11 @@ import java.util.*;
  *
  *
  *  Adnotacja @ PrePersist sprawi, że metoda zostanie uruchomiona, a w konsekwencji przypisana zostanie wartość właściwości orderedAt, zanim nastąpi trwały zapis obiektu Order.
+ *
+ *  Przy właściwości designs użyliśmy adotacji @JsonManagedReference.
+ *  Wykorzystujemy ją w kontekście serializacji encji z dwukierunkowymi relacjami, by uniknąc problemów z niekończącą się rekurencją (infinite recursion).
+ *  W ten sposób w pobranej/serializowanej encji Order, jej właściwość designs będzie zawierała kolekcję encji Pizza, ale każda z encji Pizza nie będzie już zawierała właściwości orders,
+ *  wynikającej z dwukierunkowej relacji. W tym celu w klasie Pizza, nad właściwością orders umieszczamy adnotację @JsonBackReference.
  */
 
 @Data
@@ -73,6 +79,7 @@ public class Order implements Serializable {
                 joinColumns = @JoinColumn(name = "order_id"),
                 inverseJoinColumns = @JoinColumn(name = "design_id")
                 )
+    @JsonManagedReference
     private List<Pizza> designs = new ArrayList<>();
 
     public void addDesign(Pizza pizza){

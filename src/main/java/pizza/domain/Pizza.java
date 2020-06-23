@@ -1,5 +1,7 @@
 package pizza.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -28,6 +30,11 @@ import java.util.*;
  *
  *  Adnotacja @ PrePersist sprawi, że metoda zostanie uruchomiona, a w konswkwencji przypisana zostanie wartość właściwości createdAt, zanim nastąpi trwały zapis obiektu Pizza.
  *
+ *
+ *  Przy właściwości orders użyliśmy adotacji @JsonBackReference.
+ *  Wykorzystujemy ją w kontekście serializacji encji z dwukierunkowymi relacjami, by uniknąc problemów z niekończącą się rekurencją (infinite recursion).
+ *  W ten sposób pobrana/serializowana encja Pizza nie będzie zawierała właściwości orders przechowująca referencję do kolekcji encji Order
+ *  Równocześnie w klasie Order, nad właściwością designs umieszczamy adnotację @JsonManagedReference.
  */
 
 @Data
@@ -48,6 +55,7 @@ public class Pizza {
 
     private Date createdAt;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "designs")
     private List<Order> orders = new ArrayList<>();
 
