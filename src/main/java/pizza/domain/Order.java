@@ -74,12 +74,12 @@ public class Order implements Serializable {
     @Digits(integer = 3, fraction = 0, message = "Podaj poprawny numer kodu CVV")
     private String creditCardCvv;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinTable(name = "Pizza_Order_Design",
                 joinColumns = @JoinColumn(name = "order_id"),
                 inverseJoinColumns = @JoinColumn(name = "design_id")
                 )
-    @JsonManagedReference
+   // @JsonManagedReference
     private List<Pizza> designs = new ArrayList<>();
 
     public void addDesign(Pizza pizza){
