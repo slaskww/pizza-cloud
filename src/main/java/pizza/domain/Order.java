@@ -74,7 +74,7 @@ public class Order implements Serializable {
     @Digits(integer = 3, fraction = 0, message = "Podaj poprawny numer kodu CVV")
     private String creditCardCvv;
 
-    @ManyToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.REMOVE})
     @JoinTable(name = "Pizza_Order_Design",
                 joinColumns = @JoinColumn(name = "order_id"),
                 inverseJoinColumns = @JoinColumn(name = "design_id")

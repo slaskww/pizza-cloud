@@ -14,22 +14,25 @@ import pizza.domain.Order;
 import pizza.domain.User;
 import pizza.props.config.OrderProps;
 import pizza.repositories.jpa.JpaOrderRepository;
+import pizza.repositories.jpa.JpaPizzaRepository;
 import pizza.repositories.jpa.UserRepository;
 
 import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/order", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/order", produces = {"application/json"})
 public class OrderRestController {
 
     private final JpaOrderRepository jpaOrderRepository;
     private final UserRepository userRepository;
+    private final JpaPizzaRepository jpaPizzaRepository;
     private final OrderProps props;
 
-    public OrderRestController(JpaOrderRepository jpaOrderRepository, UserRepository userRepository, OrderProps props) {
+    public OrderRestController(JpaOrderRepository jpaOrderRepository, UserRepository userRepository, JpaPizzaRepository jpaPizzaRepository, OrderProps props) {
         this.jpaOrderRepository = jpaOrderRepository;
         this.userRepository = userRepository;
+        this.jpaPizzaRepository = jpaPizzaRepository;
         this.props = props;
     }
 
@@ -57,6 +60,9 @@ public class OrderRestController {
         User user1 = userRepository.findById(1L).get();
         order.setUser(user1);
         log.info(user1.toString());
+
+        order.getDesigns().stream().forEach(pizza -> jpaPizzaRepository.save(pizza));
+
         return jpaOrderRepository.save(order);
     }
 

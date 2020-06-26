@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import pizza.domain.User;
 import pizza.dto.RegistrationForm;
 import pizza.repositories.jpa.UserRepository;
 
@@ -35,17 +36,17 @@ public class RegistrationController {
     }
 
     @ModelAttribute(name = "registerForm")
-    RegistrationForm registerForm(){
+   public RegistrationForm registerForm(){
         return new RegistrationForm();
     }
 
     @GetMapping
-    String registationForm(Model model){
+   public String registrationForm(Model model){
         return "registrationForm";
     }
 
     @PostMapping
-    String processRegistration(RegistrationForm registrationForm, Errors errors){
+   public String processRegistration(RegistrationForm registrationForm, Errors errors){
 
         if (errors.hasErrors()){
             log.info("błąd" + errors.getFieldErrors());
@@ -53,7 +54,9 @@ public class RegistrationController {
         }
 
         log.info(registrationForm.toString());
-        userRepository.save(registrationForm.toUser(passwordEncoder));
+        User userToPersist = registrationForm.toUser(passwordEncoder);
+        userRepository.save(userToPersist);
+
         return "redirect:/login";
     }
 }
