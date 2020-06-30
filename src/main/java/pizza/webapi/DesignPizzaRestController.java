@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/design", produces = "application/json")
+@RequestMapping(path = "/api/design", produces = "application/json")
 @CrossOrigin(origins = "*")
 public class DesignPizzaRestController {
 

@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/order", produces = {"application/json"})
+@RequestMapping(path = "/api/order", produces = {"application/json"})
 public class OrderRestController {
 
     private final JpaOrderRepository jpaOrderRepository;
@@ -36,6 +37,7 @@ public class OrderRestController {
         this.props = props;
     }
 
+   // @PreAuthorize("#oauth2.hasScope('read')")
     @GetMapping("/recent")
    public Iterable<Order> getOrder(){
         PageRequest page = PageRequest.of(0, props.getPageSize(),Sort.by("orderedAt").descending());
