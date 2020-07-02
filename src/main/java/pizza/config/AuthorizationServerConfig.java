@@ -8,13 +8,22 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.sql.DataSource;
 
+/**
+ *    Klasa konfigurująca serwer autoryzacyjny, rozszerzająca klasę AuthorizationServerConfigurerAdapter.
+ *    Podstawowym zadaniem tej klasy będzie skonfigurowanie serwisu danych szczegółowych klienta, kóry ma dostać dostęp do serwera zasobu.
+ *    Istnieje tu możliwość skonfigurowania danych klienta w pamięci (inMemory) lub w oparciu o dane pochodzące w tabeli bazy danych (jdbc).
+ *    Drugim elementem podlegającym konfiguracji będzie strategia tego, jak token będzie przechowywany i udostępniany.
+ *    Możemy tu skorzystać z opcji in memory token, jdbc token lub jwt token (JSON Web Token)
+ */
+
 @Configuration
 @EnableAuthorizationServer
-public class AuthorisationServerConfig extends AuthorizationServerConfigurerAdapter {
+public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 //    static final String CLIENT_ID = "adamex";
 //    static final String CLIENT_SECRET = "123456";
@@ -42,6 +51,7 @@ public class AuthorisationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
 
         configurer.jdbc(dataSource);
+
 
 //         configurer.inMemory()
 //                .withClient(CLIENT_ID)
