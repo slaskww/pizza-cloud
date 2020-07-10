@@ -1,4 +1,4 @@
-package pizza.webapi;
+package pizza.webapi.model;
 
 import org.springframework.hateoas.RepresentationModel;
 import pizza.domain.Ingredient;

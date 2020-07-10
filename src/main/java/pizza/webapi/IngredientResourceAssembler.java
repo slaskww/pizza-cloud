@@ -2,6 +2,7 @@ package pizza.webapi;
 
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import pizza.domain.Ingredient;
+import pizza.webapi.model.IngredientResource;
 
 public class IngredientResourceAssembler extends RepresentationModelAssemblerSupport<Ingredient, IngredientResource> {
 

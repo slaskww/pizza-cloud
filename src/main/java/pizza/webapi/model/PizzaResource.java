@@ -1,15 +1,12 @@
-package pizza.webapi;
+package pizza.webapi.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
-import pizza.domain.Ingredient;
 import pizza.domain.Pizza;
+import pizza.webapi.IngredientResourceAssembler;
+
 import java.util.Date;
-import java.util.List;
 
 /**
  * Klasa PizzaResource jest klasą narzędziową, która konwertuje obiekt Pizza na obiekt PizzaResource. Nowy obiekt tym się będzie różnił of Pizza, że pozwoli
