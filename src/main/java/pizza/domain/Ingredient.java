@@ -31,6 +31,7 @@ public class Ingredient {
 
     @Id
     private final String id;
+
     private final String name;
 
     @Enumerated(EnumType.STRING)

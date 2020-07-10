@@ -11,7 +11,7 @@ public class PizzaResourceAssembler extends RepresentationModelAssemblerSupport<
 
     @Override
     protected PizzaResource instantiateModel(Pizza entity) {
-        return super.instantiateModel(entity);
+        return new PizzaResource(entity);
     }
 
     @Override

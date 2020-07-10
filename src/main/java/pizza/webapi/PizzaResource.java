@@ -1,8 +1,10 @@
 package pizza.webapi;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
 import pizza.domain.Ingredient;
 import pizza.domain.Pizza;
@@ -24,11 +26,10 @@ import java.util.List;
 public class PizzaResource extends RepresentationModel<PizzaResource> {
 
 
-
     public PizzaResource(Pizza pizza) {
         this.name = pizza.getName();
         this.createdAt = pizza.getCreatedAt();
-        this.ingredients = pizza.getIngredients();
+        this.ingredients = new IngredientResourceAssembler().toCollectionModel(pizza.getIngredients());
     }
 
     @Getter
@@ -38,5 +39,5 @@ public class PizzaResource extends RepresentationModel<PizzaResource> {
     private final Date createdAt;
 
     @Getter
-    private final List<Ingredient> ingredients;
+    private final CollectionModel<IngredientResource> ingredients;
 }
