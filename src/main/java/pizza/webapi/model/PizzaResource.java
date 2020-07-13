@@ -16,7 +16,7 @@ import java.util.Date;
  * Teraz w DesignPizzaRestControllerze obiekt EntityModel<Pizza> będziemy mogli zastąpić obiektem PizzaResource.
  *
  * Żeby można było łatwo przekonwertować listę obiektów Pizza na obiekt CollectionModel<PizzaResource> musimy posłużyć się komponentem asemblera zasobu. W tym celu tworzymy
- * klase PizzaResourceAssembler, która rozszerza ResourceAssemblerSupport<Pizza, PizzaResource>
+ * klase PizzaResourceAssembler, która rozszerza RepresentationModelAssemblerSupport<Pizza, PizzaResource>
  */
 
 
