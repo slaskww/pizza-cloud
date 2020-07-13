@@ -9,7 +9,7 @@ public class IngredientResourceAssembler extends RepresentationModelAssemblerSup
 
     public IngredientResourceAssembler() {
 
-        super(DesignPizzaRestController.class, IngredientResource.class);
+        super(IngredientRestController.class, IngredientResource.class);
     }
 
     @Override
