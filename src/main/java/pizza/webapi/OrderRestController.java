@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 import pizza.domain.Order;
 import pizza.domain.User;
@@ -25,8 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-@RestController
-@RequestMapping(path = "/api/order", produces = {"application/json"})
+@RepositoryRestController
 public class OrderRestController {
 
     private final JpaOrderRepository jpaOrderRepository;
@@ -42,7 +43,8 @@ public class OrderRestController {
     }
 
    // @PreAuthorize("#oauth2.hasScope('read')")
-    @GetMapping("/recent")
+    @GetMapping("orders/recent")
+    @ResponseBody
    public CollectionModel<OrderResource> getOrder(){
         PageRequest page = PageRequest.of(0, props.getPageSize(),Sort.by("orderedAt").descending());
         List<Order> orders = jpaOrderRepository.findAll(page).getContent();
@@ -50,7 +52,7 @@ public class OrderRestController {
         return rOrders.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(OrderRestController.class).getOrder()).withRel("recents"));
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping("orders/{orderId}")
     public ResponseEntity<OrderResource> getById(@PathVariable("orderId") Long orderId){
 
         Optional<Order> optOrder = jpaOrderRepository.findById(orderId);
@@ -67,7 +69,7 @@ public class OrderRestController {
     }
 
 
-    @PostMapping(value = "/new", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "orders/new", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Order postOrder(@RequestBody Order order, @AuthenticationPrincipal UserDetails user){
         User user1 = userRepository.findById(1L).get();
@@ -79,7 +81,7 @@ public class OrderRestController {
         return jpaOrderRepository.save(order);
     }
 
-    @DeleteMapping("/{orderId}")
+    @DeleteMapping("orders/{orderId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable Long orderId){
         try{
@@ -87,7 +89,7 @@ public class OrderRestController {
         } catch (EmptyResultDataAccessException e){}
     }
 
-    @PatchMapping(value = "/{orderId}", consumes = "application/json")
+    @PatchMapping(value = "orders/{orderId}", consumes = "application/json")
     public Order patchOrder(
             @PathVariable("orderId") Long orderId,
             @RequestBody Order patch){
