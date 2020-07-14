@@ -6,7 +6,7 @@ import pizza.domain.Ingredient;
 import pizza.webapi.model.IngredientResource;
 
 /**
- * Klasa komponentu asemblera zasobu. Jest ona wykorzystywana do konwersji listy obiektów Pizza na obiekt CollectionModel<IngredientResource>.
+ * Klasa komponentu asemblera zasobu. Jest ona wykorzystywana do konwersji listy obiektów Ingredient na obiekt CollectionModel<IngredientResource>.
  *
  * List<Ingredient> ingredients;
  * CollectionModel<IngredientResource> recentResources = new IngredientResourceAssembler().toCollectionModel(ingredients);

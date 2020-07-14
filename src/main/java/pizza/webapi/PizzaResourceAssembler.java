@@ -1,5 +1,6 @@
 package pizza.webapi;
 
+import lombok.Getter;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import pizza.domain.Pizza;

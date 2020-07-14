@@ -40,10 +40,15 @@ public class DesignPizzaRestController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Pizza> getById(@PathVariable("id") Long id){
+    public ResponseEntity<PizzaResource> getById(@PathVariable("id") Long id){
         Optional<Pizza> optPizza = jpaPizzaRepository.findById(id);
         if(optPizza.isPresent()){
-            return new ResponseEntity<>(optPizza.get(), HttpStatus.OK);
+            return new ResponseEntity<>(new PizzaResource(optPizza.get())
+                    .add(WebMvcLinkBuilder
+                            .linkTo(WebMvcLinkBuilder
+                                    .methodOn(DesignPizzaRestController.class)
+                                    .getById(id))
+                            .withRel("design")), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }

@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,9 @@ import pizza.props.config.OrderProps;
 import pizza.repositories.jpa.JpaOrderRepository;
 import pizza.repositories.jpa.JpaPizzaRepository;
 import pizza.repositories.jpa.UserRepository;
+import pizza.webapi.model.OrderResource;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -39,18 +43,25 @@ public class OrderRestController {
 
    // @PreAuthorize("#oauth2.hasScope('read')")
     @GetMapping("/recent")
-   public Iterable<Order> getOrder(){
+   public CollectionModel<OrderResource> getOrder(){
         PageRequest page = PageRequest.of(0, props.getPageSize(),Sort.by("orderedAt").descending());
-       return jpaOrderRepository.findAll(page);
+        List<Order> orders = jpaOrderRepository.findAll(page).getContent();
+        CollectionModel<OrderResource> rOrders = new OrderResourceAssembler().toCollectionModel(orders);
+        return rOrders.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(OrderRestController.class).getOrder()).withRel("recents"));
     }
 
     @GetMapping("/{orderId}")
-    public ResponseEntity<Order> getById(@PathVariable("orderId") Long orderId){
+    public ResponseEntity<OrderResource> getById(@PathVariable("orderId") Long orderId){
 
         Optional<Order> optOrder = jpaOrderRepository.findById(orderId);
 
         if(optOrder.isPresent()){
-            return new ResponseEntity<>(optOrder.get(), HttpStatus.OK);
+            return new ResponseEntity<>(new OrderResource(optOrder.get())
+                    .add(WebMvcLinkBuilder
+                            .linkTo(WebMvcLinkBuilder
+                                    .methodOn(OrderRestController.class)
+                                    .getById(orderId))
+                            .withRel("order")), HttpStatus.OK);
         }
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
