@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 import pizza.domain.Order;
 import pizza.domain.User;
 import pizza.webapi.PizzaResourceAssembler;
@@ -18,9 +19,15 @@ import java.util.Date;
  *
  * Żeby można było łatwo przekonwertować listę obiektów Order na obiekt CollectionModel<OrderResource> musimy posłużyć się komponentem asemblera zasobu. W tym celu tworzymy
  * klase OrderResourceAssembler, która rozszerza RepresentationModelAssemblerSupport<Order, OrderResource>
+ *
+ *  Adnotacja Relation służy do konfiguracji relacji użytej przy osadzaniu obiektów IngredientResource jako hiperłączy w odpowiedziach JSON (format HAL).
+ *  Domyślnie pole w JSON dla relacji z pojedyńczym zasobem przyjmuje nazwę klasy IngredientResource. Atrybut value umożliwia zmianę tej nazwy.
+ *  Analogicznie nazwa pola w JSON dla relacji z kolekcją zasobów to IngredientResourceList. Atrybut collectionRelation umożliwia zmianę tej nazwy.
+ *  Adnotacja ta zapobiega przyszłym problemom użytkowników API (wykorzystujących na stałe zdefiniowaną nazwę IngredientResourceList), jakie mogłyby wyniknąć ze zmiany nazwy klasy zasobu w ramach faktoryzacji.
  */
 
-@Getter()
+@Getter
+@Relation(value = "order", collectionRelation = "orders")
 public class OrderResource extends RepresentationModel<OrderResource> {
 
 
