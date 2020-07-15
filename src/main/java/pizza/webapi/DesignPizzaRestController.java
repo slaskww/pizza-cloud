@@ -24,6 +24,19 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * Adnotacja RepositoryRestController oferowana przez Spring Data REST sprawia, że mapowanie ścieżki dostępu do zasobów kontrolera nastąpi wg. konfiguracji ścieżki bazowej
+ * punktów końcowych Spring Data REST (skonfigurowanej w application.properties). Adnotacja ta nie zawiera w sobie adnotacji @ResponseBody, więc należy pamiętać o jej umieszczeniu
+ * nad metodą zwracającą odpowiedź, lub opakować odpowiedź w obiekt ResponseEntity<>.
+ * Spring Data REST udostępnia REST API 'out of the box', bazując na inerfejsach repozytoriów. Jeśli więc zależy nam na udostępnieniu punktów końcowych przeprowadzających operacje CRUD,
+ * jest on w stanie w zupełności zastąpić kontrolery restowe.
+ * W naszym przypadku Springowe Data REST endpointy zostały wzbogacone o ścieźkę do ostatnio dodanych obiektów Pizza (/api/pizzas/recent). W prawdzie Spring Data REST umożliwia wykonanie żądania
+ * do zasobu z opcjonalnymi parametrami (page,size,sort), np: "/api/pizzas/?sort=createdAd,desc&page=0&size=12", ale powoduje to zaśmiecanie kodu i wymusza na kliencie definiowanie parametrów żądania 'na stale'.
+ * Nam zależałoby na tym, by klient odszukał zwięzły adres URL z ostatnio dodanymi pizzami (/api/pizzas/recent) na liście łączy Spring Data w punkcie końcowym /api/pizzas.
+ * Domyślnie własne endpointy nie zostają dodane i zwrócone razem z endpointami Spring Data. By takie łącza dodać do dostarczanej automatycznie listy,
+ * należy posłużyć się komponentem procesora zasobu. Służy on do przeprowadzania operacji na zasobach zanim zostana one zwrócone przez API. Taki komponent bean utworzyliśmy w klasie RestConfig.
+ */
+
 @Slf4j
 @RepositoryRestController
 @CrossOrigin(origins = "*")

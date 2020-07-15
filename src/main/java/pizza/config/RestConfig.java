@@ -9,11 +9,20 @@ import org.springframework.hateoas.server.RepresentationModelProcessor;
 import pizza.domain.Order;
 import pizza.domain.Pizza;
 
+/**
+ *  Domyślnie własne endpointy nie zostają dodane i zwrócone razem z endpointami Spring Data. By takie łącza dodać do dostarczanej automatycznie listy,
+ *  należy posłużyć się komponentem procesora zasobu (RepresentationModelProcessor). Służy on do przeprowadzania operacji na zasobach
+ *  zanim zostana one zwrócone przez API.
+ *  Procesorem zasobu jest tutaj RepresentationModelProcessor, a zasob jest typu PagedModel<EntityModel<Pizza>>, czyli typu zwracanego przez punkt końcowy /api/pizzas.
+ *  Po dodaniu do obiektu zasobu nowego łącza do '/api/pizzas/recent', znajdzie się ono na liście razem z automatycznie wygenerowanymi przez Spring Dada REST endpointami.
+ *
+ */
+
 @Configuration
 public class RestConfig {
 
     @Bean
-    public RepresentationModelProcessor<PagedModel<EntityModel<Pizza>>> pizzaProcesso(EntityLinks links) {
+    public RepresentationModelProcessor<PagedModel<EntityModel<Pizza>>> pizzaProcessor(EntityLinks links) {
         return new RepresentationModelProcessor<PagedModel<EntityModel<Pizza>>>() {
             @Override
             public PagedModel<EntityModel<Pizza>> process(PagedModel<EntityModel<Pizza>> resources) {
