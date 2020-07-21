@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Aplikacja Pizza Cloud</title>
+</head>
+<body>
+<img th:src="@{/images/pizza-cloud.png}">
+<h1>Panel Klienta REST API</h1>
+<h2>Pobierz wszystkie składniki</h2>
+<form method="post" th:action="@{/client/ingredients}">
+<input type="submit" value="Pobierz">
+
+<h2>Lista składników:</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>#Lp</th>
+            <th>Nazwa</th>
+            <th>Typ</th>
+            <th>Id</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="ingredient, iStat : ${ingredientList}">
+               <td th:text="${iStat.count}"></td>
+                <td th:text="${ingredient.name}"></td>
+                <td th:text="${ingredient.getType().name()}"></td>
+                <td th:text="${ingredient.id}"></td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>

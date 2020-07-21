@@ -3,11 +3,16 @@ package pizza.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.client.Traverson;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.hateoas.server.RepresentationModelProcessor;
+import org.springframework.web.client.RestTemplate;
 import pizza.domain.Order;
 import pizza.domain.Pizza;
+
+import java.net.URI;
 
 /**
  *  Domyślnie własne endpointy nie zostają dodane i zwrócone razem z endpointami Spring Data. By takie łącza dodać do dostarczanej automatycznie listy,
@@ -41,5 +46,15 @@ public class RestConfig {
                 return model;
             }
         };
+    }
+
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
+
+    @Bean
+    public Traverson traverson(){
+        return new Traverson(URI.create("https://localhost:8080/api"), MediaTypes.HAL_JSON);
     }
 }
