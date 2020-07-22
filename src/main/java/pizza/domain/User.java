@@ -1,5 +1,7 @@
 package pizza.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -33,6 +35,7 @@ public class User implements UserDetails {
     private Long id;
 
     private String username;
+    @JsonIgnore
     private String password;
     private String fullName;
     private String street;
