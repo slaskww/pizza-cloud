@@ -9,9 +9,9 @@
 <body>
 <img th:src="@{/images/pizza-cloud.png}">
 <h1>Panel Klienta REST API</h1>
-<h2>Pobierz wszystkie składniki</h2>
 <form method="post" th:action="@{/client/ingredients}">
-<input type="submit" value="Pobierz">
+   <label th:for="submit">Pobierz wszystkie składniki</label>
+<input type="submit" name="submit" value="Pobierz">
 
 <h2>Lista składników:</h2>
     <table>

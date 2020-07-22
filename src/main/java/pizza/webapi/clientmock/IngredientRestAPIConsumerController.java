@@ -1,5 +1,6 @@
 package pizza.webapi.clientmock;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +11,7 @@ import pizza.domain.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Slf4j
 @Controller
 @RequestMapping("/client/ingredients")
 public class IngredientRestAPIConsumerController {
@@ -29,8 +30,10 @@ public class IngredientRestAPIConsumerController {
     @PostMapping
     public String getAllIngredients(Model model){
 
+        log.info("before fetching data from ingredientRestAPIConsumer");
         List<Ingredient> ingredientList = new ArrayList<>(ingredientRestAPIConsumer.getAllIngredients());
         model.addAttribute("ingredientList", ingredientList);
+        log.info("before returning view name");
         return "clientPanel";
     }
 }
