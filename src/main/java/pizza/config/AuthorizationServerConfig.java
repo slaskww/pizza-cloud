@@ -2,6 +2,7 @@ package pizza.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
@@ -10,15 +11,47 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
 
 /**
  *    Klasa konfigurująca serwer autoryzacyjny, rozszerzająca klasę AuthorizationServerConfigurerAdapter.
- *    Podstawowym zadaniem tej klasy będzie skonfigurowanie serwisu danych szczegółowych klienta, kóry ma dostać dostęp do serwera zasobu.
- *    Istnieje tu możliwość skonfigurowania danych klienta w pamięci (inMemory) lub w oparciu o dane pochodzące w tabeli bazy danych (jdbc).
- *    Drugim elementem podlegającym konfiguracji będzie strategia tego, jak token będzie przechowywany i udostępniany.
- *    Możemy tu skorzystać z opcji in memory token, jdbc token lub jwt token (JSON Web Token)
+ *    Nadpisując jej metody, możemy skonfigurować trzy elementy:
+ *
+ *    - ClientDetailsServiceConfigurer (konfigurator serwisu danych klienta)
+ *      Podstawowym zadaniem tej klasy będzie skonfigurowanie serwisu danych szczegółowych klienta OAuth2 (ClientDetailsService).
+ *      Serwis ClientDetailsService dostarcza informacji szczegółowych (ClientDetails) nt. klientów zapisanych w pamięci (inMemory) albo utrwalonych w bazie danych (jdbc),
+ *      którzy mają dostęp do serwera zasobu.
+ *      Przy pomocy ClientDetailsServiceConfigurer istnieje możliwość skonfigurowania źródła danych klienta w oparciu o dane inicjowane w pamięci (inMemory) lub w oparciu
+ *      o dane pochodzące z bazy danych (jdbc).
+ *
+ *    - AuthorizationServerEndpointsConfigurer (konfigurator punktów końcowych serwera autoryzacji)
+ *      AuthorizationServerEndpointsConfigurer konfiguruje właściwości punktów końcowych serwera autoryzacji. Definiuje autoryzację i punkty końcowe tokenu oraz serwisy tokenu.
+ *      Jedna z właściwości obiektu AuthorizationServerEndpointsConfigurer, AuthorizationServerTokenServices, generuje access tokeny specyficzne dla klienta.
+ *
+ *      Konfiguratorowi przekazujemy skonfigurowany TokenStore. W ramach konfiguracji TokenStore decydujemy się wybór strategii tego, jak token będzie przechowywany i udostępniany.
+ *      Możemy tu skorzystać z opcji in memory token, jdbc token lub jwt token (JSON Web Token)
+ *      TokenStore utrwala tokeny OAuth2. Pozwala na odczytanie access tokenu (OAuth2AccessToken) i refresh tokenu (OAuth2RefreshToken), pobranie z access tokenu tokenu autentykacji OAuth2
+ *      (token autentykacji OAuth2 {OAuth2Authentication}  może zawierać dwa tokeny uwierzytelnienia (Authentication) : jedno dla klienta i jedno dla użytkownika - jesli przyznana autoryzacja wymaga uwierzytelnienia użytkownika).
+ *      JwtTokenStore jest implementacją TokenStore, ktora nie utrwala danych tokena jwt, a jedynie odczytuje dane z tokena.
+ *
+ *      Konfiguratorowi przekazujemy skonfigurowany AuthenticationManager.
+ *      AuthenticationManager przetwarza żądania uwierzytelnienia klienta. Bean AuthenticationManager został skonfigurowany w klasie SecurityConfig.
+ *      Zadaniem AuthenticationManagera jest próba uwierzytelnienia klienta w oparciu o obiekt Authentication.
+ *      Obiekt Authentication reprezentuje token żądania uwierzytelnienia lub token uwierzytelnionego podmiotu zabezpieczeń (principala) po przetworzeniu żądania przez AuthenticationManager.
+ *      Po uwierzytelnieniu żądania, token Authentication będzie zwykle przechowywany w lokalnym wątku  SecurityContext  zarządzanym przez SecurityContextHolder.
+ *
+ *      Konfiguratorowi przekazujemy JwtAccessTokenConverter.
+ *      JwtAccessTokenConverter jest 'pomocnikiem', który tłumaczy między wartościami tokenów zakodowanymi za pomocą JWT a informacjami uwierzytelniającymi OAuth (w obu kierunkach).
+ *
+ *    - AuthorizationServerSecurityConfigurer (konfigurator zabezpieczeń serwera autoryzacji)
+ *      W naszym przypadku nie nadpisujemy metody dającej mozliwość skonfigurowanie tego obiektu.
+ *      Odwołując się do AuthorizationServerSecurityConfigurer możemy skonfigurować niestandardowe filtry uwierzytelniania dla TokenEndpoint
+ *
+
  */
 
 @Configuration
@@ -39,6 +72,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private TokenStore tokenStore;
+
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -65,7 +99,25 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore)
-                .authenticationManager(authenticationManager);
+                .authenticationManager(authenticationManager)
+        .accessTokenConverter(accessTokenConverter());
     }
 
+
+    @Bean
+    public  TokenStore tokenStore() {
+
+       // return new InMemoryTokenStore();
+
+        JwtTokenStore tokenStore = new JwtTokenStore(accessTokenConverter());
+        return tokenStore;
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter(){
+        JwtAccessTokenConverter jwtATConverter = new JwtAccessTokenConverter();
+        jwtATConverter.setSigningKey("as466gf");
+
+        return jwtATConverter;
+    }
 }

@@ -15,12 +15,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Res
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-//    private static final String RESOURCE_ID = "resource_id";
-//
-//    @Override
-//    public void configure(ResourceServerSecurityConfigurer resources) {
-//        resources.resourceId(RESOURCE_ID).stateless(false);
-//    }
+    private static final String RESOURCE_ID = "resource_id";
+
+    @Override
+    public void configure(ResourceServerSecurityConfigurer resources) {
+        resources.resourceId(RESOURCE_ID).stateless(false);
+    }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
