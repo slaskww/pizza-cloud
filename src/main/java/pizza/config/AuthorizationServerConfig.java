@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -32,10 +33,11 @@ import javax.sql.DataSource;
  *      AuthorizationServerEndpointsConfigurer konfiguruje właściwości punktów końcowych serwera autoryzacji. Definiuje autoryzację i punkty końcowe tokenu oraz serwisy tokenu.
  *      Jedna z właściwości obiektu AuthorizationServerEndpointsConfigurer, AuthorizationServerTokenServices, generuje access tokeny specyficzne dla klienta.
  *
- *      Konfiguratorowi przekazujemy skonfigurowany TokenStore. W ramach konfiguracji TokenStore decydujemy się wybór strategii tego, jak token będzie przechowywany i udostępniany.
+ *      Konfiguratorowi przekazujemy skonfigurowany TokenStore. W ramach konfiguracji TokenStore decydujemy się na wybór strategii tego, jak token będzie przechowywany i udostępniany.
  *      Możemy tu skorzystać z opcji in memory token, jdbc token lub jwt token (JSON Web Token)
  *      TokenStore utrwala tokeny OAuth2. Pozwala na odczytanie access tokenu (OAuth2AccessToken) i refresh tokenu (OAuth2RefreshToken), pobranie z access tokenu tokenu autentykacji OAuth2
- *      (token autentykacji OAuth2 {OAuth2Authentication}  może zawierać dwa tokeny uwierzytelnienia (Authentication) : jedno dla klienta i jedno dla użytkownika - jesli przyznana autoryzacja wymaga uwierzytelnienia użytkownika).
+ *      (token autentykacji OAuth2 {OAuth2Authentication}  może zawierać dwa rodzaje uwierzytelnienia: jedno dla klienta (obiekt tokenu żądania OAuth2Request) i jedno dla użytkownika (obiekt tokenu Authentication)-
+ *      jesli przyznana autoryzacja wymaga uwierzytelnienia użytkownika).
  *      JwtTokenStore jest implementacją TokenStore, ktora nie utrwala danych tokena jwt, a jedynie odczytuje dane z tokena.
  *
  *      Konfiguratorowi przekazujemy skonfigurowany AuthenticationManager.
@@ -45,11 +47,13 @@ import javax.sql.DataSource;
  *      Po uwierzytelnieniu żądania, token Authentication będzie zwykle przechowywany w lokalnym wątku  SecurityContext  zarządzanym przez SecurityContextHolder.
  *
  *      Konfiguratorowi przekazujemy JwtAccessTokenConverter.
- *      JwtAccessTokenConverter jest 'pomocnikiem', który tłumaczy między wartościami tokenów zakodowanymi za pomocą JWT a informacjami uwierzytelniającymi OAuth (w obu kierunkach).
+ *      JwtAccessTokenConverter jest 'pomocnikiem', który tłumaczy między wartościami tokenów zakodowanymi za pomocą JWT a informacjami uwierzytelniającymi OAuth (w obu kierunkach:
+ *          1) informacje uwierzytelniające OAuth zawarte w inicjalnym żądaniu uwierzytelniajacym => JwtAccessTokenConverter => dane w PAYLOAD JWT Tokena
+ *          2) dane w JWT Tokena dołączanego do żądań do zasobów REST API -> JwtAccessTokenConverter -> informacje uwierzytelniające OAuth)
  *
  *    - AuthorizationServerSecurityConfigurer (konfigurator zabezpieczeń serwera autoryzacji)
  *      W naszym przypadku nie nadpisujemy metody dającej mozliwość skonfigurowanie tego obiektu.
- *      Odwołując się do AuthorizationServerSecurityConfigurer możemy skonfigurować niestandardowe filtry uwierzytelniania dla TokenEndpoint
+ *      Odwołując się do AuthorizationServerSecurityConfigurer możemy skonfigurować niestandardowe filtry uwierzytelniania dla TokenEndpoint (punktu końcowego dla żądań POST o access token)
  *
 
  */
@@ -83,8 +87,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception {
 
         configurer.jdbc(dataSource);
-
-
 //         configurer.inMemory()
 //                .withClient(CLIENT_ID)
 //                .secret(CLIENT_SECRET)
