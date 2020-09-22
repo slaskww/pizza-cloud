@@ -56,6 +56,8 @@ import javax.sql.DataSource;
  *      W naszym przypadku nie nadpisujemy metody dającej mozliwość skonfigurowanie tego obiektu.
  *      Odwołując się do AuthorizationServerSecurityConfigurer możemy skonfigurować niestandardowe filtry uwierzytelniania dla TokenEndpoint (punktu końcowego dla żądań POST o access token)
  *
+ *      @ConditionalOnProperty - włączamy lub wyłączamy skonfigurowany tu Serwer Autorycacji. Po wyłączeniu możemy skorzystać z alternatywnego serwera autporyzacji, dostarczanego przez KeyCloak
+ *
 
  */
 

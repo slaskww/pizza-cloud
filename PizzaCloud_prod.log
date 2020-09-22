@@ -1,5 +1,0 @@
-"2020-06-18 17:41:54 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2020-06-18 17:42:59 - Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [580] milliseconds.
-""2020-06-18 17:51:09 - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2020-06-18 17:52:01 - Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [599] milliseconds.
-"
