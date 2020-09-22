@@ -2,12 +2,14 @@ package pizza.config;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.JwtAccessTokenConverterConfigurer;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,11 +17,11 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Request;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 
 @Slf4j
-public class JwtAccessTokenCustomizer extends DefaultAccessTokenConverter
-        {
+public class JwtAccessTokenCustomizer extends DefaultAccessTokenConverter implements JwtAccessTokenConverterConfigurer {
 
     private static final String AUTHORITIES_ELEMENT_IN_JWT = "resource_access";
 
@@ -30,6 +32,12 @@ public class JwtAccessTokenCustomizer extends DefaultAccessTokenConverter
     public JwtAccessTokenCustomizer(ObjectMapper mapper) {
         this.mapper = mapper;
         log.info("Initialized {}", JwtAccessTokenCustomizer.class.getSimpleName());
+    }
+
+    @Override
+    public void configure(JwtAccessTokenConverter converter) {
+    converter.setAccessTokenConverter(this);
+        log.info("Configured {}", JwtAccessTokenConverter.class.getSimpleName());
     }
 
 
@@ -91,4 +99,5 @@ public class JwtAccessTokenCustomizer extends DefaultAccessTokenConverter
                     AUTHORITIES_ELEMENT_IN_JWT + " not found in token");
         }
     }
+
 }

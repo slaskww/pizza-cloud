@@ -2,6 +2,7 @@ package pizza.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,6 +61,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
+@ConditionalOnProperty(prefix = "restowe.security", value = "enabledAuthorizationServer", havingValue = "true")
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
 //    static final String CLIENT_ID = "adamex";

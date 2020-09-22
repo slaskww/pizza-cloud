@@ -2,6 +2,8 @@ package pizza;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,7 +16,10 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-@SpringBootApplication
+//@SpringBootApplication
+@SpringBootApplication()
+		//exclude = {SecurityAutoConfiguration.class,
+		//UserDetailsServiceAutoConfiguration.class})
 public class PizzaCloudApplication {
 
 	public static void main(String[] args) {
